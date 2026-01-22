@@ -13,11 +13,12 @@ const getServerTime = () => Date.now() - SERVER_EPOCH;
 
 const HOOP = {
   x: 0,
-  y: 2.6,    // rim height used by client
-  z: -6.6,   // half-court hoop sits at -Z
-  rimRadiusX: 0.32,  // horizontal tolerance (≈ hoop radius projected on X)
-  yTol: 0.28,        // vertical tolerance around rim plane
-  zTol: 0.45         // depth tolerance around hoop plane
+  y: 2.6,
+  z: -6.6,
+  // Looser scoring tolerances (more forgiving for casual play)
+  rimRadiusX: 0.45,
+  yTol: 0.38,
+  zTol: 0.65
 };
 
 // Score de-bounce: don’t allow another score within this many ms
