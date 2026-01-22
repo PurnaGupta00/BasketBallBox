@@ -182,27 +182,26 @@ function snapshotBall(room) {
 // HOOP_POS = (x=0, y=2.6, z=-6.6)
 function didBallJustScore(room) {
   const b = room.ball;
+  const now = Date.now();
 
-  // Match client hoop center
-  const HOOP_X = 0.0;
-  const HOOP_Y = 2.6;
-  const HOOP_Z = -6.6;
+  // Debounce scoring (prevents double-scores / jitter)
+  if (room.lastScoreAt && (now - room.lastScoreAt) < SCORE_COOLDOWN_MS) return false;
 
-  // Tolerances: keep a forgiving window so minor desync still counts
-  const X_TOL = 0.40;  // “ring width” horizontally
-  const Z_TOL = 0.80;  // depth window around hoop plane
-  const Y_TOL = 0.60;  // around rim height (we’ll also require vy < 0)
-  const FLOOR_MIN_Y = 1.5; // ignore stuff bouncing near the floor
+  // Use the HOOP constants already defined at the top of the file
+  const nearX = Math.abs(b.x - HOOP.x) <= HOOP.rimRadiusX;
+  const nearZ = Math.abs(b.z - HOOP.z) <= HOOP.zTol;
+  const nearY = Math.abs(b.y - HOOP.y) <= HOOP.yTol;
 
-  const nearX = Math.abs(b.x - HOOP_X) <= X_TOL;
-  const nearZ = Math.abs(b.z - HOOP_Z) <= Z_TOL;
-  const nearY = Math.abs(b.y - HOOP_Y) <= Y_TOL;
+  // Require actual vertical motion and falling through the rim plane
+  const movingVertically = Math.abs(b.vy) > 0.002;
+  const downward = b.vy < -0.002;
 
-  const downward = b.vy < 0 || true;
-  const aboveFloor = b.y > FLOOR_MIN_Y;
+  // Ignore near-floor chaos
+  const aboveFloor = b.y > 1.5;
 
-  return !b.held && nearX && nearZ && nearY && movingVertically && aboveFloor;
+  return (!b.held && nearX && nearZ && nearY && movingVertically && downward && aboveFloor);
 }
+
 
 
 // server.js
@@ -210,6 +209,7 @@ function handleServerScore(room) {
   // 1) Award point
   const scorerRole = room.lastShooterRole || room.ballOwnerRole || room.offenseRole || 'player1';
   room.scores[scorerRole] = Math.max(0, (room.scores[scorerRole] || 0) + 1);
+  room.lastScoreAt = Date.now();
 
   // 2) Freeze and neutralize ball
   const freezeMs = 1800;
