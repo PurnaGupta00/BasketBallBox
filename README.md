@@ -1,45 +1,24 @@
-# 🏀 BasketballBox
+# 🏀 BasketBallBox
 
-**BasketballBox** is a 3D multiplayer basketball game built with **Three.js** and **WebSockets**, where two players can compete 1v1 in real-time. You control your player in first-person view and use real basketball moves — dribble, shoot, dunk, block, and more.
+A 1v1 3D basketball game you play in the browser. No game engine. Try it at [basketballbox.xyz](https://basketballbox.xyz).
 
-**Public repo updates are paused to protect secret keys. The game itself will keep getting updates until August 31, our final release**
+You sign in, create or join a room, and play against someone live. Rooms can be public or private with a password. You pick casual or competitive mode and choose a score target: first to 5, 7, 11, or 21. Players have accounts, earn coins, and can buy skins from a shop.
 
----
+The 3D client runs in the browser using Three.js with animated GLB player models. Game state syncs over WebSockets.
 
-## 🎮 Features
+## This repo
 
-- 🧍‍♂️ First-person player controller
-- 🔥 8 basketball animations
-- 🧠 Real-time multiplayer over WebSockets
-- 🏀 Dynamic ball physics & scoring system
-- 🚧 No game engine — everything built from scratch using HTML, CSS, and JavaScript
+This is the backend. The frontend is private. What's here:
 
----
+- WebSocket server that manages game sessions
+- Room logic including passwords, modes, and score targets
+- Firebase auth
+- Coins system
+- Shop system
+- Player animation files (GLB)
 
-## 🎥 Animations Included
+## Tech
 
-| Index | Animation           |
-|-------|---------------------|
-| 0     | Dunk                |
-| 1     | Idle                |
-| 2     | Block               |
-| 3     | Crossover           |
-| 4     | Defense Shuffle     |
-| 5     | Left Dribble        |
-| 6     | Shooting            |
-| 7     | Right Dribble       |
-
-Press `Space` to cycle through animations (for testing). 
-
----
-
-## Final Release Date
-
-Final version will be released on August 31st. 
-
-## ⚙️ Installation & Run Locally
-
-### 1. Clone the repo
-```bash
-git clone https://github.com/TheExpertCoder00/basketballbox.git
-cd basketballbox
+- Node.js
+- WebSockets
+- Firebase
